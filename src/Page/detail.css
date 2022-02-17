@@ -1,0 +1,21 @@
+.Bedid{
+    justify-content: center;
+    display: flex;
+    background-color: rgb(172, 241, 172);
+    padding-bottom: 195px;
+    padding-top: 120px;
+}
+.chairid{
+    justify-content: center;
+    display: flex;
+    background-color: rgb(172, 241, 172);
+    padding-bottom: 195px;
+    padding-top: 120px;
+}
+.OxygenTankid{
+    justify-content: center;
+    display: flex;
+    background-color: rgb(172, 241, 172);
+    padding-bottom: 195px;
+    padding-top: 120px;
+}

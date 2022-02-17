@@ -1,0 +1,8 @@
+.Profile{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(238, 241, 185);
+    height: 100vh;
+}
