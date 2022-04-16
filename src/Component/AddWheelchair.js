@@ -1,8 +1,26 @@
 import React, { useState,useEffect } from "react";
-import { Modal, Button, Form, Input, InputNumber } from "antd";
+import { Modal, Button, Form, Input, Upload ,message} from "antd";
 import PageHome from "../Page/PageHome";
 import { firestore } from "../index";
-import Wheelcahir from "./Wheelchair";
+import { UploadOutlined } from '@ant-design/icons';
+
+const props = {
+  name: 'file',
+  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+  headers: {
+    authorization: 'authorization-text',
+  },
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+};
 
 const AddWheelchair = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -100,6 +118,11 @@ const AddWheelchair = () => {
           </Form.Item>
           <Form.Item name={["status"]} label="สถานะ">
             <Input onChange={(e) => setStatus(e.target.value)} />
+          </Form.Item>
+          <Form.Item name={["img"]} label="รูปภาพ">
+            <Upload {...props}>
+            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
           </Form.Item>
 
           <Form.Item name={["img"]} label="รูปภาพ">
