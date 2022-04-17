@@ -55,11 +55,6 @@ const BorrowedItems = () => {
                 src= {item.img}
               />
             }
-            // actions={[
-              
-            //   <div> <DownSquareOutlined onClick={handleClick}/> กดปุ่มเพื่อคืน</div>
-             
-            // ]}
           >
             <Meta
               title ={`รหัสอุปกรณ์ ${item.id}`}

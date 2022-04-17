@@ -17,6 +17,7 @@ import Bed from "../Component/Bed";
 import Wheelcahir from "../Component/Wheelchair";
 import OxygenTank from "../Component/OxygenTank";
 import Account from "../Component/Account";
+import DAdmin from "../Component/DAdmin";
 import BorrowedItems from "../Component/BorrowedItems";
 import DamagedItem from "../Component/DamagedItem";
 import { useHistory, useLocation } from "react-router-dom";
@@ -54,6 +55,10 @@ const PageHome = (props) => {
     } else if (key == "DamagedItem")
     setMenuselact("DamagedItem")
     
+    
+     
+
+    
   };
 
   
@@ -89,8 +94,9 @@ const PageHome = (props) => {
           </Menu.Item>
 
           <Menu.Item key="7" onClick={() => onSelect("AddFrom")}>
-            เพิ่มรายการ
+            Admin
           </Menu.Item>
+       
         </Menu>
       </Sider>
       <Layout className="site-layout">

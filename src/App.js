@@ -7,6 +7,7 @@ import SeletedItemChair from "./Page/SelectedItemChair";
 import SeletedItemOxygen from "./Page/SelectedItemOxygen";
 import Account from "./Component/Account"
 import DamagedBed from "./Page/DamagedBed";
+import DAdmin from "./Component/DAdmin";
 
 function App() {
  
@@ -20,6 +21,7 @@ function App() {
         <Route path="/DamagedBed/:id" component={DamagedBed} />
         <Route path="/SelectedItemChair/:id" component={SeletedItemChair} />
         <Route path="/SelectedItemOxygen/:id" component={SeletedItemOxygen} />
+        <Route path="/Delete" component={DAdmin} />
       </BrowserRouter>
     </div>
   );

@@ -1,32 +1,30 @@
-import { Card,Button } from 'antd';
-import { DownSquareOutlined,EditOutlined } from '@ant-design/icons';
+import { Button, Card,  } from 'antd';
+import { DownSquareOutlined } from '@ant-design/icons';
 import React, { useState,useEffect,} from "react";
-import { useHistory } from "react-router-dom";
 import { firestore } from '../index'
 import "./Bed.css"
-
 const { Meta } = Card;
-const DAdmin  = () => {
-const deleteData = (id) => {
-        console.log(id);
-        firestore.collection("bed").doc(id.toString()).delete();
-      };
-  const history = useHistory();
-  const [ Bed ,setBed] =useState([{}]);
-  const onADD = (id, img, location, status, type) => {
-    firestore
-      .collection("damaged")
-      .doc(id.toString())
-      .set({ id, img, location, status, type });
+const DAdmin= () => {
+    
+  const [ BedItem ,setBed] =useState([{}]);
+
+  const deleteData = (id) => {
+    console.log(id);
+    firestore.collection("Bed").doc(id.toString()).delete();
   };
+
+  const handleClick =()=>{
+    console.log("CLICK");
+  }
   const retriveData = () => {
 
     firestore.collection("Bed").onSnapshot(snapshot => {
       let MyBed = snapshot.docs.map(d => {
 
-        const { id,status,type,img } = d.data()
-        console.log(id,status,type,img)
-        return { id,status,type,img}
+        const { id, img, location, status, type } = d.data()
+        
+        return {id, img, location, status, type}
+
 
       })
 
@@ -37,27 +35,27 @@ const deleteData = (id) => {
   useEffect(() => {
 
 
-    retriveData()
+    retriveData();
 
-
-  },)
-  
+  })
+    
     return (
-    <div className="BedCss">
+        <div className="BedCss">
         {
         
-        Bed.map((item) => {
+        BedItem.map((item, index) => {
           return (
             <Card
+            key={index}
             style={{ width: 300,marginRight: "20px" }}
             cover={
               <img 
-                style ={{width: 200,height:250,justifyContent:"center'"}}
+                style ={{width: 200,height:250}}
                 alt="example"
                 src= {item.img}
               />
             }
-           
+
           >
             <Meta
               title ={`รหัสอุปกรณ์ ${item.id}`}
@@ -66,14 +64,15 @@ const deleteData = (id) => {
              <Meta
               description={item.status}
             />
-           <Button onClick={()=>deleteData(item.id)}>กดปุ่มเพื่อคืน</Button>
+            <Button onClick={()=>deleteData(item.id)}>ลบอุปกรณ์</Button>
           </Card>
+          
           )
+          
         })
       }
     </div>
-)
-};
-
-
-export default DAdmin;
+    )
+  
+    }
+  export default DAdmin;
