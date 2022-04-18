@@ -1,22 +1,22 @@
-import React, { useState,useEffect } from "react";
-import { Modal, Button, Form, Input, Upload ,message} from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal, Button, Form, Input, Upload, message } from "antd";
 import PageHome from "../Page/PageHome";
 import { firestore } from "../index";
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from "@ant-design/icons";
 
 const props = {
-  name: 'file',
-  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+  name: "file",
+  action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
   headers: {
-    authorization: 'authorization-text',
+    authorization: "authorization-text",
   },
   onChange(info) {
-    if (info.file.status !== 'uploading') {
+    if (info.file.status !== "uploading") {
       console.log(info.file, info.fileList);
     }
-    if (info.file.status === 'done') {
+    if (info.file.status === "done") {
       message.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === 'error') {
+    } else if (info.file.status === "error") {
       message.error(`${info.file.name} file upload failed.`);
     }
   },
@@ -58,15 +58,9 @@ const AddWheelchair = () => {
     },
   };
   useEffect(() => {
-
-
-    retriveData()
-    
-
-
-  },)
+    retriveData();
+  }, []);
   const onFinish = (values) => {
-    
     let id =
       InventoryTracking.length === 0
         ? 1
@@ -79,28 +73,21 @@ const AddWheelchair = () => {
   };
 
   const retriveData = () => {
-
-    firestore.collection("Wheelchair").onSnapshot(snapshot => {
-
-
-      let MyWheelchair = snapshot.docs.map(d => {
-
-        const {id, img, location, status, type } = d.data()
-        console.log(id, img, location, status, type)
-        return { id, img, location, status, type}
-
-      })
-      setInventoryTracking(MyWheelchair)
-
-    })
-  }
-
+    firestore.collection("Wheelchair").onSnapshot((snapshot) => {
+      let MyWheelchair = snapshot.docs.map((d) => {
+        const { id, img, location, status, type } = d.data();
+        console.log(id, img, location, status, type);
+        return { id, img, location, status, type };
+      });
+      setInventoryTracking(MyWheelchair);
+    });
+  };
 
   return (
     <>
-      <Button type="primary" onClick={showModal}style={{ marginLeft:"10px" }}>
-        รถเข็นผู้ป่วย
-      </Button>
+      <Button type="primary" onClick={showModal} style={{ marginLeft: "10px" }}>
+        รถเข็ นผู้ ป่ วย{" "}
+      </Button>{" "}
       <Modal
         title="Admin"
         visible={isModalVisible}
@@ -114,30 +101,29 @@ const AddWheelchair = () => {
           validateMessages={validateMessages}
         >
           <Form.Item name={["Type"]} label="ประเภทของอุปกรณ์">
-            <Input onChange={(e) => setType(e.target.value)} />
-          </Form.Item>
+            <Input onChange={(e) => setType(e.target.value)} />{" "}
+          </Form.Item>{" "}
           <Form.Item name={["status"]} label="สถานะ">
-            <Input onChange={(e) => setStatus(e.target.value)} />
-          </Form.Item>
+            <Input onChange={(e) => setStatus(e.target.value)} />{" "}
+          </Form.Item>{" "}
           <Form.Item name={["img"]} label="รูปภาพ">
             <Upload {...props}>
-            <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>
+              <Button icon={<UploadOutlined />}> Click to Upload </Button>{" "}
+            </Upload>{" "}
           </Form.Item>
-
           <Form.Item name={["img"]} label="รูปภาพ">
-            <Input onChange={(e) => setImg(e.target.value)} />
-          </Form.Item>
+            <Input onChange={(e) => setImg(e.target.value)} />{" "}
+          </Form.Item>{" "}
           <Form.Item name={["location"]} label="สถานที่จัดเก็บ">
-          <Input onChange={(e) => setLocation(e.target.value)} />
-          </Form.Item>
+            <Input onChange={(e) => setLocation(e.target.value)} />{" "}
+          </Form.Item>{" "}
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
             <Button onClick={onFinish} type="primary" htmlType="submit">
-              ส่ง
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
+              ส่ ง{" "}
+            </Button>{" "}
+          </Form.Item>{" "}
+        </Form>{" "}
+      </Modal>{" "}
     </>
   );
 };

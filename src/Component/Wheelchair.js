@@ -23,9 +23,7 @@ const { Meta } = Card;
           return { id,status,type,img}
   
         })
-  
         setWheelchair(MyWheelchair)
-  
       })
     }
     useEffect(() => {
@@ -34,7 +32,7 @@ const { Meta } = Card;
       retriveData()
   
   
-    },)
+    }, [])
   
     return (
     <div className="WheelchairCss">

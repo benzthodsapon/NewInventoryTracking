@@ -38,7 +38,7 @@ const { Meta } = Card;
     retriveData()
 
 
-  },)
+  }, [])
   
     return (
     <div className="BedCss">
