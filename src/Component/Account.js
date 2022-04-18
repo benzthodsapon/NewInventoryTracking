@@ -62,7 +62,7 @@ const Account = (props) => {
   };
   useEffect(() => {
     retriveData();
-  });
+  }, []);
 
   return (
     <div className="Profile">

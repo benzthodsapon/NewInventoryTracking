@@ -8,6 +8,7 @@ import SeletedItemOxygen from "./Page/SelectedItemOxygen";
 import Account from "./Component/Account"
 import DamagedBed from "./Page/DamagedBed";
 import DAdmin from "./Component/DAdmin";
+import Items from "./Component/Item";
 
 function App() {
  
@@ -16,6 +17,7 @@ function App() {
       <BrowserRouter>
         <Route exact path="/" component={LoginPage} />
         <Route path="/PageHome" component={PageHome} />
+        <Route path="/PageHome/:name" component={Items} />
         <Route path="/Account" component={Account} />
         <Route path="/SelectedItemBed/:id" component={SeletedItemBed} />
         <Route path="/DamagedBed/:id" component={DamagedBed} />
