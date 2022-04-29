@@ -1,8 +1,5 @@
-import { Layout, Menu, Breadcrumb, Button, Modal } from "antd";
-import {
-  FormOutlined,
-  AuditOutlined,
-} from "@ant-design/icons";
+import { Layout, Menu, Breadcrumb, Button, Modal, message } from "antd";
+import { FormOutlined, AuditOutlined } from "@ant-design/icons";
 import AddFrom from "../Component/AddFrom";
 import React, { useState, useEffect } from "react";
 import Bed from "../Component/Bed";
@@ -16,6 +13,7 @@ import firebase from "firebase/compat/app";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import Items from "../Component/Item";
+import { auth } from "../FirebaseConfig/Config";
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -24,6 +22,7 @@ const PageHome = (props) => {
   const [profile, setProfile] = useState("");
   const [type, setType] = useState([]);
   const cart = useSelector((state) => state.cart);
+  const history = useHistory();
 
   // get current user from firebase
   var user = firebase.auth().currentUser;
@@ -32,15 +31,19 @@ const PageHome = (props) => {
     console.log("testcolllap", collapsed);
     setCollapsed(collapsed);
   };
-  const history = useHistory();
   const [menuselect, setMenuselact] = useState(" ");
 
   useEffect(() => {
     retriveData();
   }, []);
 
-  const onSelect = (key) => {
+  const handleLogOut = async () => {
+    await auth.signOut();
+    message.success("LogOut Success.")
+    history.push("/");
+  }
 
+  const onSelect = (key) => {
     if (key == "Bed") {
       setMenuselact("Bed");
     } else if (key == "Wheelchair") {
@@ -54,7 +57,7 @@ const PageHome = (props) => {
     } else if (key == "DamagedItem") {
       setMenuselact("DamagedItem");
     } else {
-        setMenuselact(key)
+      setMenuselact(key);
     }
     history.push(`/PageHome/${key}`);
   };
@@ -114,22 +117,28 @@ const PageHome = (props) => {
                 </>
               );
             })}
+          <Menu.Item key="6" onClick={handleLogOut}>
+            ออกจากระบบ
+          </Menu.Item>
         </Menu>{" "}
       </Sider>{" "}
       <Layout className="site-layout">
         <Content style={{ margin: "0 15px" }}>
-          <div
+        <div
             className="site-layout-background"
             style={{ padding: 24, minHeight: 360 }}
           >
             {menuselect == "Account" && <Account />}{" "}
-            {menuselect == "Bed" && <Bed />}{" "}
-            {menuselect == "Wheelchair" && <Wheelcahir />}{" "}
-            {menuselect == "OxygenTank" && <OxygenTank />}{" "}
-            {menuselect == "BorrowedItems" && <BorrowedItems />}{" "}
-            {menuselect == "AddFrom" && <AddFrom />}{" "}
-            {menuselect == "DamagedItem" && <DamagedItem />}{" "}
-            {history.location.pathname !== "/PageHome" && !history.location.pathname.includes("AddFrom") &&<Items data={menuselect} /> }
+            {menuselect == "Bed" && window.location.pathname.includes("Bed") && <Bed />}{" "}
+            {menuselect == "Wheelchair" && window.location.pathname.includes("Wheelchair")  && <Wheelcahir />}{" "}
+            {menuselect == "OxygenTank" && window.location.pathname.includes("OxygenTank")  && <OxygenTank />}{" "}
+            {menuselect == "BorrowedItems" && window.location.pathname.includes("BorrowedItems")  && <BorrowedItems />}{" "}
+            {menuselect == "AddFrom" && window.location.pathname.includes("AddFrom")  && <AddFrom />}{" "}
+            {menuselect == "DamagedItem" && window.location.pathname.includes("Wheelchair")  && <DamagedItem />}{" "}
+            {history.location.pathname !== "/PageHome" &&
+              !history.location.pathname.includes("AddFrom") && (
+                <Items data={menuselect} />
+              )}
           </div>{" "}
         </Content>{" "}
       </Layout>{" "}

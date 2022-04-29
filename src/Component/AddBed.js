@@ -3,35 +3,19 @@ import { Modal, Button, Form, Input, Upload, message } from "antd";
 import PageHome from "../Page/PageHome";
 import { firestore } from "../index";
 import { UploadOutlined } from "@ant-design/icons";
-
-const props = {
-  name: "file",
-  action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-  headers: {
-    authorization: "authorization-text",
-  },
-  onChange(info) {
-    if (info.file.status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === "done") {
-      message.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-};
+import firebase from "../FirebaseConfig/Config";
 
 const AddBed = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [id, setId] = useState(0);
   const [type, setType] = useState([]);
   const [status, setStatus] = useState([]);
-  const [img, setImg] = useState([]);
+  const [img, setImg] = useState("");
   const [location, setLocation] = useState([]);
-
+  const [process, setProcess] = useState(0);
   const [InventoryTracking, setInventoryTracking] = useState([{}]);
-
+  const [downloadURL, setDownloadURL] = useState(null);
+  console.log("props >... ",props.type);
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -61,7 +45,7 @@ const AddBed = (props) => {
   useEffect(() => {
     retriveData();
   }, []);
-  
+
   const onFinish = (values) => {
     let id =
       InventoryTracking.length === 0
@@ -70,7 +54,7 @@ const AddBed = (props) => {
     firestore
       .collection(props.type)
       .doc(id + "")
-      .set({ id, img, location, status, type });
+      .set({ id, img: downloadURL, location, status, type });
     alert("You Add Finish");
   };
 
@@ -86,12 +70,38 @@ const AddBed = (props) => {
     });
   };
 
+  const handleChange = async (e) => {
+    setImg(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    let file = img
+    var storage = firebase.storage();
+    var storageRef = storage.ref();
+    var uploadTask = storageRef.child("props.type" + file.name).put(file);
+    uploadTask.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        var progress =
+          Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setProcess(progress)
+      },
+      (error) => {
+        throw error;
+      },
+      () => {
+        uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+          setDownloadURL(url)
+        });
+      }
+    );
+  };
+
   return (
     <>
-      <Button type="primary" onClick={showModal} style={{ margin: "10px"}}>
+      <Button type="primary" onClick={showModal} style={{ margin: "10px" }}>
         {props.name}
       </Button>{" "}
-
       <Modal
         title="Admin"
         visible={isModalVisible}
@@ -111,9 +121,10 @@ const AddBed = (props) => {
             <Input onChange={(e) => setStatus(e.target.value)} />{" "}
           </Form.Item>
           <Form.Item name={["img"]} label="รูปภาพ">
-            <Upload {...props}>
-              <Button icon={<UploadOutlined />}> Click to Upload </Button>{" "}
-            </Upload>{" "}
+            <input type="file" onChange={handleChange}></input>
+            <button className="button" onClick={handleUpload}>
+              Upload
+            </button>
           </Form.Item>
           <Form.Item name={["location"]} label="สถานที่จัดเก็บ">
             <Input onChange={(e) => setLocation(e.target.value)} />{" "}
