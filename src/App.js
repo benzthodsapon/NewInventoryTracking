@@ -9,7 +9,7 @@ import Account from "./Component/Account"
 import DamagedBed from "./Page/DamagedBed";
 import DAdmin from "./Component/DAdmin";
 import Items from "./Component/Item";
-
+import SeletedItem from "./Page/SelectItem"
 function App() {
  
   return (
@@ -23,6 +23,7 @@ function App() {
         <Route path="/DamagedBed/:id" component={DamagedBed} />
         <Route path="/SelectedItemChair/:id" component={SeletedItemChair} />
         <Route path="/SelectedItemOxygen/:id" component={SeletedItemOxygen} />
+        <Route path="/SelectedItem/:type/:id" component={SeletedItem} />
         <Route path="/Delete" component={DAdmin} />
       </BrowserRouter>
     </div>

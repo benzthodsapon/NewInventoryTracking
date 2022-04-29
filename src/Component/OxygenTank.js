@@ -7,7 +7,8 @@ import "./OxygenTankCss.css"
 
 const { Meta } = Card;
 
- const OxygenTank = () => {
+ const OxygenTank = (menuselect) => {
+   console.log("menuselect : ",menuselect);
   const history = useHistory();
   const [ OxygenTank ,setOxygenTank] =useState([{}]);
   const retriveData = () => {

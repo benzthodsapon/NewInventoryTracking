@@ -5,6 +5,7 @@ import { firestore } from "../index";
 import { UploadOutlined } from "@ant-design/icons";
 import firebase from "../FirebaseConfig/Config";
 
+
 const AddBed = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [id, setId] = useState(0);
@@ -15,13 +16,14 @@ const AddBed = (props) => {
   const [process, setProcess] = useState(0);
   const [InventoryTracking, setInventoryTracking] = useState([{}]);
   const [downloadURL, setDownloadURL] = useState(null);
-  console.log("props >... ",props.type);
+  console.log("downloadURL .. ",downloadURL);
   const showModal = () => {
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
     setIsModalVisible(false);
+    onFinish();
   };
 
   const handleCancel = () => {
@@ -46,20 +48,24 @@ const AddBed = (props) => {
     retriveData();
   }, []);
 
-  const onFinish = (values) => {
-    let id =
+  const onFinish = async (values) => {
+    if(downloadURL) {
+      let id =
       InventoryTracking.length === 0
         ? 1
         : InventoryTracking[InventoryTracking.length - 1].id + 1;
-    firestore
+   await firestore
       .collection(props.type)
       .doc(id + "")
       .set({ id, img: downloadURL, location, status, type });
+      setIsModalVisible(false);
+    }
+
     alert("You Add Finish");
   };
 
-  const retriveData = () => {
-    firestore.collection(props.type).onSnapshot((snapshot) => {
+  const retriveData = async () => {
+    await firestore.collection(props.type).onSnapshot((snapshot) => {
       let MyBed = snapshot.docs.map((d) => {
         const { id, img, location, status, type } = d.data();
         console.log(id, img, location, status, type);
@@ -70,28 +76,33 @@ const AddBed = (props) => {
     });
   };
 
-  const handleChange = async (e) => {
+  const handleChange = (e) => {
     setImg(e.target.files[0]);
+    setTimeout(() => {
+      handleUpload();
+    }, 1500)
   };
 
   const handleUpload = async () => {
-    let file = img
+    let file = img;
     var storage = firebase.storage();
     var storageRef = storage.ref();
-    var uploadTask = storageRef.child("props.type" + file.name).put(file);
-    uploadTask.on(
+    var uploadTask = storageRef.child("images/" + file.name).put(file);
+
+    await uploadTask.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
       (snapshot) => {
         var progress =
           Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setProcess(progress)
+        setProcess(progress);
       },
       (error) => {
         throw error;
       },
       () => {
         uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-          setDownloadURL(url)
+          console.log("url : ",url);
+          setDownloadURL(url);
         });
       }
     );
@@ -105,8 +116,7 @@ const AddBed = (props) => {
       <Modal
         title="Admin"
         visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        footer={false}
       >
         <Form
           {...layout}
@@ -122,15 +132,15 @@ const AddBed = (props) => {
           </Form.Item>
           <Form.Item name={["img"]} label="รูปภาพ">
             <input type="file" onChange={handleChange}></input>
-            <button className="button" onClick={handleUpload}>
+            {/* <button className="button" onClick={handleUpload}>
               Upload
-            </button>
+            </button> */}
           </Form.Item>
           <Form.Item name={["location"]} label="สถานที่จัดเก็บ">
             <Input onChange={(e) => setLocation(e.target.value)} />{" "}
           </Form.Item>{" "}
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-            <Button onClick={onFinish} type="primary" htmlType="submit">
+            <Button type="primary" disabled={!downloadURL} htmlType="submit">
               ส่ ง{" "}
             </Button>{" "}
           </Form.Item>{" "}

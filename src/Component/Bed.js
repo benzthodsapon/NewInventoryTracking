@@ -8,7 +8,8 @@ import "./Bed.css"
 
 const { Meta } = Card;
 
- const Bed  = () => {
+ const Bed  = ({ menuselect}) => {
+   console.log("menuselect .. ",menuselect);
   const history = useHistory();
   const [ Bed ,setBed] =useState([{}]);
   const onADD = (id, img, location, status, type) => {

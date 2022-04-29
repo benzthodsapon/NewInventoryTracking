@@ -6,11 +6,9 @@ import "./detail.css";
 import { CheckCircleOutlined } from "@ant-design/icons";
 
 const { Meta } = Card;
-const SeletedItemChair = () => {
+
+const SeletedItem = ( props ) => {
   const history = useHistory();
-  console.log(
-    history.location.pathname.substr(history.location.pathname.length - 1)
-  );
   const [InventoryTracking, setInventoryTracking] = useState([{}]);
   const [id, setId] = useState(0);
   const [type, setType] = useState([]);
@@ -18,47 +16,61 @@ const SeletedItemChair = () => {
   const [img, setImg] = useState([]);
   const [location, setLocation] = useState([]);
   const [MyBorrow, setBorrow] = useState([{}]);
-  const [Wheelcahir, setWheelchair] = useState([{}]);
+  console.log("props.match.params.type .. ",props.match.params.type);
+  const onFinish = (values) => {
+    let id =
+      InventoryTracking.length === 0
+        ? 1
+        : InventoryTracking[InventoryTracking.length - 1].id + 1;
+    firestore
+      .collection("Oxygentank")
+      .doc(id + "")
+      .set({ id, img, location, status, type });
+    alert("You Add Finish");
+  };
+
+  const onADD = (id, img, location, status, type) => {
+    firestore
+    .collection("borrow")
+    .doc(id.toString())
+    .set({ id, img, location, status, type });
+    alert("ทำการยืมเสร็จเรียบร้อย");
+    };
+
+  const [OxygenTank, setOxygenTank] = useState([{}]);
 
   const retriveData = () => {
-    firestore.collection("Wheelchair").onSnapshot((snapshot) => {
-      let MyWheelchair = snapshot.docs.map((d) => {
+    firestore.collection(props.match.params.type && props.match.params.type).onSnapshot((snapshot) => {
+      let MyOxygenTank = snapshot.docs.map((d) => {
         const { id, status, type, img, location } = d.data();
-        console.log(id, status, type, img, location);
         return { id, status, type, img, location };
       });
 
-      setWheelchair(MyWheelchair);
+      setOxygenTank(MyOxygenTank);
     });
-  };
-  const onADD = (id, img, location, status, type) => {
-    firestore
-      .collection("borrow")
-      .doc(id.toString())
-      .set({ id, img, location, status, type });
-    alert("ทำการยืมเสร็จเรียบร้อย");
   };
   const retriveDataBorrow = () => {
     firestore.collection("borrow").onSnapshot((snapshot) => {
-      let MyBorrow = snapshot.docs.map((d) => {
+      let MyBorrow= snapshot.docs.map((d) => {
         const { id, img, location, status, type } = d.data();
         return { id, img, location, status, type };
       });
-
       setBorrow(MyBorrow);
     });
   };
-
-  useEffect(() => {
-    retriveData();
+  useEffect(() =>{
+    if(props.match.params.type) {
+      retriveData();
+    }
     retriveDataBorrow();
-  }, []);
+  });
 
   return (
-    <div className="chairid">
-      {Wheelcahir.map((item) => {
+    <div className="OxygenTankid">
+      {OxygenTank.map((item) => {
         return (
           <>
+            {console.log(item.id)}
             {item?.id?.toString() ===
               history.location.pathname.substr(
                 history.location.pathname.length - 1
@@ -73,18 +85,8 @@ const SeletedItemChair = () => {
                       src={item.img}
                     />
                   }
-                  actions={[
-                    <h1
-                      onClick={() =>
-                        onADD(
-                          item.id,
-                          item.img,
-                          item.location,
-                          item.status,
-                          item.type
-                        )
-                      }
-                    >
+                  actions={[ 
+                    <h1 onClick={() => onADD(item.id, item.img, item.location, item.status, item.type)}>
                       <CheckCircleOutlined />
                       ยืนยันการยืม
                     </h1>,
@@ -104,4 +106,4 @@ const SeletedItemChair = () => {
     </div>
   );
 };
-export default SeletedItemChair;
+export default SeletedItem;

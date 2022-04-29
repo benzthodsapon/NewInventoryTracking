@@ -46,14 +46,14 @@ const Items = (props) => {
                     actions={[
                       <h1
                         onClick={() =>
-                          history.push(`/SelectedItemChair/${item.id}`)
+                          history.push(`/SelectedItem/${props.match.params.name}/${item.id}`)
                         }
                       >
                         {" "}
                         <DownSquareOutlined /> กดปุ่มเพื่อยืม
                       </h1>,
                     ]}
-                  >
+                  >{console.log("props .. ",props.match.params.name)}
                     <Meta
                       title={`รหัสอุปกรณ์ ${item.id}`}
                       description={item.type}

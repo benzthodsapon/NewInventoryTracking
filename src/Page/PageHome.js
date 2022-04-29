@@ -129,16 +129,16 @@ const PageHome = (props) => {
             style={{ padding: 24, minHeight: 360 }}
           >
             {menuselect == "Account" && <Account />}{" "}
-            {menuselect == "Bed" && window.location.pathname.includes("Bed") && <Bed />}{" "}
-            {menuselect == "Wheelchair" && window.location.pathname.includes("Wheelchair")  && <Wheelcahir />}{" "}
-            {menuselect == "OxygenTank" && window.location.pathname.includes("OxygenTank")  && <OxygenTank />}{" "}
-            {menuselect == "BorrowedItems" && window.location.pathname.includes("BorrowedItems")  && <BorrowedItems />}{" "}
-            {menuselect == "AddFrom" && window.location.pathname.includes("AddFrom")  && <AddFrom />}{" "}
-            {menuselect == "DamagedItem" && window.location.pathname.includes("Wheelchair")  && <DamagedItem />}{" "}
-            {history.location.pathname !== "/PageHome" &&
+            {menuselect == "Bed" && window.location.pathname.includes("Bed") && <Bed menuselect={menuselect} />}{" "}
+            {menuselect == "Wheelchair" && window.location.pathname.includes("Wheelchair")  && <Wheelcahir menuselect={menuselect} />}{" "}
+            {menuselect == "OxygenTank" && window.location.pathname.includes("OxygenTank")  && <OxygenTank menuselect={menuselect} />}{" "}
+            {menuselect == "BorrowedItems" && window.location.pathname.includes("BorrowedItems")  && <BorrowedItems menuselect={menuselect} />}{" "}
+            {menuselect == "AddFrom" && window.location.pathname.includes("AddFrom")  && <AddFrom menuselect={menuselect} />}{" "}
+            {menuselect == "DamagedItem" && window.location.pathname.includes("Wheelchair")  && <DamagedItem menuselect={menuselect} />}{" "}
+            {/* {history.location.pathname !== "/PageHome" &&
               !history.location.pathname.includes("AddFrom") && (
                 <Items data={menuselect} />
-              )}
+              )} */}
           </div>{" "}
         </Content>{" "}
       </Layout>{" "}
